@@ -2,7 +2,7 @@
 // 动画模块 - 校园巴士移动
 // =====================================================
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+import * as THREE from 'three';
 
 let movingBus = null;
 let busPath = [];

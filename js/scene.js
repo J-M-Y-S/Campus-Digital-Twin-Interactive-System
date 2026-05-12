@@ -2,12 +2,7 @@
 // 场景构建模块
 // =====================================================
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
-
-// 创建组
-export const buildingGroup = new THREE.Group();
-export const roadGroup = new THREE.Group();
-export const vegetationGroup = new THREE.Group();
+import * as THREE from 'three';
 
 // =====================================================
 // 创建地形地面
@@ -28,16 +23,16 @@ export function createGround(scene) {
 // =====================================================
 // 创建建筑
 // =====================================================
-export function createBuildings() {
-    createTeachingBuilding(-15, 0, -10, { width: 12, height: 15, depth: 8 }, 'teaching_building_a', 0x4a90d9);
-    createLibrary(15, 0, -5, { width: 15, height: 12, depth: 10 }, 'library', 0x8B4513);
-    createCanteen(0, 0, 15, { width: 14, height: 8, depth: 10 }, 'canteen', 0xd4a574);
-    createDormitory(-20, 0, 15, { width: 10, height: 18, depth: 8 }, 'dormitory_a', 0xc9b896);
-    createSportsHall(20, 0, 15, { width: 20, height: 10, depth: 15 }, 'sports_hall', 0x9e9e9e);
-    createClockTower(0, 0, -20, { radius: 2, height: 25 }, 'clock_tower', 0xe8dcc4);
+export function createBuildings(buildingGroup) {
+    createTeachingBuilding(-15, 0, -10, { width: 12, height: 15, depth: 8 }, 'teaching_building_a', 0x4a90d9, buildingGroup);
+    createLibrary(15, 0, -5, { width: 15, height: 12, depth: 10 }, 'library', 0x8B4513, buildingGroup);
+    createCanteen(0, 0, 15, { width: 14, height: 8, depth: 10 }, 'canteen', 0xd4a574, buildingGroup);
+    createDormitory(-20, 0, 15, { width: 10, height: 18, depth: 8 }, 'dormitory_a', 0xc9b896, buildingGroup);
+    createSportsHall(20, 0, 15, { width: 20, height: 10, depth: 15 }, 'sports_hall', 0x9e9e9e, buildingGroup);
+    createClockTower(0, 0, -20, { radius: 2, height: 25 }, 'clock_tower', 0xe8dcc4, buildingGroup);
 }
 
-function createTeachingBuilding(x, y, z, size, id, color) {
+function createTeachingBuilding(x, y, z, size, id, color, group) {
     const g = new THREE.Group();
     const mainGeo = new THREE.BoxGeometry(size.width, size.height, size.depth);
     const mainMat = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.3 });
@@ -72,10 +67,10 @@ function createTeachingBuilding(x, y, z, size, id, color) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'building' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createLibrary(x, y, z, size, id, color) {
+function createLibrary(x, y, z, size, id, color, group) {
     const g = new THREE.Group();
     for (let i = 0; i < 4; i++) {
         const floorGeo = new THREE.BoxGeometry(size.width - i * 1, 3, size.depth - i * 0.8);
@@ -104,10 +99,10 @@ function createLibrary(x, y, z, size, id, color) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'building' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createCanteen(x, y, z, size, id, color) {
+function createCanteen(x, y, z, size, id, color, group) {
     const g = new THREE.Group();
     const mainGeo = new THREE.BoxGeometry(size.width, size.height, size.depth);
     const mainMat = new THREE.MeshStandardMaterial({ color, roughness: 0.6 });
@@ -134,10 +129,10 @@ function createCanteen(x, y, z, size, id, color) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'building' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createDormitory(x, y, z, size, id, color) {
+function createDormitory(x, y, z, size, id, color, group) {
     const g = new THREE.Group();
     const mainGeo = new THREE.BoxGeometry(size.width, size.height, size.depth);
     const mainMat = new THREE.MeshStandardMaterial({ color, roughness: 0.6 });
@@ -165,10 +160,10 @@ function createDormitory(x, y, z, size, id, color) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'building' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createSportsHall(x, y, z, size, id, color) {
+function createSportsHall(x, y, z, size, id, color, group) {
     const g = new THREE.Group();
     const wallGeo = new THREE.BoxGeometry(size.width, size.height, size.depth);
     const wallMat = new THREE.MeshStandardMaterial({ color: 0xeeeeee, roughness: 0.7 });
@@ -192,10 +187,10 @@ function createSportsHall(x, y, z, size, id, color) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'building' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createClockTower(x, y, z, size, id, color) {
+function createClockTower(x, y, z, size, id, color, group) {
     const g = new THREE.Group();
 
     const bodyGeo = new THREE.CylinderGeometry(size.radius, size.radius * 1.2, size.height, 8);
@@ -220,21 +215,21 @@ function createClockTower(x, y, z, size, id, color) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'building' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
 // =====================================================
 // 创建道路
 // =====================================================
-export function createRoads() {
-    createRoad(-35, 0.02, 0, 70, 4, 0, '东西主干道');
-    createRoad(0, 0.02, -35, 4, 70, Math.PI / 2, '南北主干道');
-    createRoad(-10, 0.02, -5, 20, 2.5, 0, '教学楼前道路');
-    createRoad(0, 0.02, 10, 15, 2.5, Math.PI / 2, '食堂前道路');
-    createCircularRoad(0, 0.03, 0, 28, 3);
+export function createRoads(roadGroup) {
+    createRoad(-35, 0.02, 0, 70, 4, 0, '东西主干道', roadGroup);
+    createRoad(0, 0.02, -35, 4, 70, Math.PI / 2, '南北主干道', roadGroup);
+    createRoad(-10, 0.02, -5, 20, 2.5, 0, '教学楼前道路', roadGroup);
+    createRoad(0, 0.02, 10, 15, 2.5, Math.PI / 2, '食堂前道路', roadGroup);
+    createCircularRoad(0, 0.03, 0, 28, 3, roadGroup);
 }
 
-function createRoad(x, y, z, length, width, rotation, name) {
+function createRoad(x, y, z, length, width, rotation, name, group) {
     const roadGeo = new THREE.PlaneGeometry(length, width);
     const roadMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.9 });
     const road = new THREE.Mesh(roadGeo, roadMat);
@@ -243,7 +238,7 @@ function createRoad(x, y, z, length, width, rotation, name) {
     road.rotation.z = rotation;
     road.receiveShadow = true;
     road.userData = { id: name, type: 'road' };
-    roadGroup.add(road);
+    group.add(road);
 
     const lineGeo = new THREE.PlaneGeometry(length, 0.15);
     const lineMat = new THREE.MeshStandardMaterial({ color: 0xffcc00, emissive: 0xffcc00, emissiveIntensity: 0.1 });
@@ -251,10 +246,10 @@ function createRoad(x, y, z, length, width, rotation, name) {
     centerLine.rotation.x = -Math.PI / 2;
     centerLine.position.set(x, y + 0.01, z);
     centerLine.rotation.z = rotation;
-    roadGroup.add(centerLine);
+    group.add(centerLine);
 }
 
-function createCircularRoad(x, y, z, radius, width) {
+function createCircularRoad(x, y, z, radius, width, group) {
     const curve = new THREE.EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
     const points = curve.getPoints(60);
     const closedCurve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(p.x, 0, p.y)), true);
@@ -265,13 +260,13 @@ function createCircularRoad(x, y, z, radius, width) {
     road.rotation.x = -Math.PI / 2;
     road.receiveShadow = true;
     road.userData = { id: '环校园道路', type: 'road' };
-    roadGroup.add(road);
+    group.add(road);
 }
 
 // =====================================================
 // 创建植被
 // =====================================================
-export function createVegetation() {
+export function createVegetation(vegetationGroup) {
     const treePositions = [
         { x: -25, z: -25 }, { x: -20, z: -28 }, { x: -28, z: -18 },
         { x: 25, z: -20 }, { x: 28, z: -15 }, { x: 22, z: -25 },
@@ -282,7 +277,7 @@ export function createVegetation() {
         { x: -12, z: 8 }, { x: 8, z: -12 }
     ];
 
-    treePositions.forEach((pos, index) => createTree(pos.x, 0, pos.z, `tree_${index + 1}`));
+    treePositions.forEach((pos, index) => createTree(pos.x, 0, pos.z, `tree_${index + 1}`, vegetationGroup));
 
     const bushPositions = [
         { x: -30, z: 0 }, { x: 30, z: 5 }, { x: -15, z: -18 },
@@ -291,10 +286,10 @@ export function createVegetation() {
         { x: 10, z: 28 }, { x: -25, z: -5 }, { x: 25, z: -3 }
     ];
 
-    bushPositions.forEach((pos, index) => createBush(pos.x, 0, pos.z, `bush_${index + 1}`));
+    bushPositions.forEach((pos, index) => createBush(pos.x, 0, pos.z, `bush_${index + 1}`, vegetationGroup));
 }
 
-function createTree(x, y, z, id) {
+function createTree(x, y, z, id, group) {
     const g = new THREE.Group();
 
     const trunkGeo = new THREE.CylinderGeometry(0.3, 0.4, 3, 6);
@@ -319,10 +314,10 @@ function createTree(x, y, z, id) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'vegetation' };
-    vegetationGroup.add(g);
+    group.add(g);
 }
 
-function createBush(x, y, z, id) {
+function createBush(x, y, z, id, group) {
     const g = new THREE.Group();
     const bushMat = new THREE.MeshStandardMaterial({ color: 0x2E8B57, roughness: 0.8 });
 
@@ -340,13 +335,13 @@ function createBush(x, y, z, id) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'vegetation' };
-    vegetationGroup.add(g);
+    group.add(g);
 }
 
 // =====================================================
 // 创建辅助设施
 // =====================================================
-export function createFacilities() {
+export function createFacilities(buildingGroup) {
     const lampPositions = [
         { x: -25, z: 3 }, { x: -15, z: 3 }, { x: -5, z: 3 },
         { x: 5, z: 3 }, { x: 15, z: 3 }, { x: 25, z: 3 },
@@ -354,21 +349,21 @@ export function createFacilities() {
         { x: -3, z: 15 }, { x: -3, z: 25 }
     ];
 
-    lampPositions.forEach((pos, index) => createLampPost(pos.x, 0, pos.z, `路灯_${index + 1}`));
+    lampPositions.forEach((pos, index) => createLampPost(pos.x, 0, pos.z, `路灯_${index + 1}`, buildingGroup));
 
     const benchPositions = [
         { x: -20, z: -8 }, { x: 12, z: 5 },
         { x: -5, z: 20 }, { x: 8, z: -15 }
     ];
 
-    benchPositions.forEach((pos, index) => createBench(pos.x, 0, pos.z, `长椅_${index + 1}`));
+    benchPositions.forEach((pos, index) => createBench(pos.x, 0, pos.z, `长椅_${index + 1}`, buildingGroup));
 
-    createBusStop(-25, 0, 8, 'bus_stop');
-    createSculpture(8, 0, -15, 'sculpture');
-    createDuckFallback(8, 0, 8);
+    createBusStop(-25, 0, 8, 'bus_stop', buildingGroup);
+    createSculpture(8, 0, -15, 'sculpture', buildingGroup);
+    createDuckFallback(8, 0, 8, buildingGroup);
 }
 
-function createLampPost(x, y, z, id) {
+function createLampPost(x, y, z, id, group) {
     const g = new THREE.Group();
     const poleGeo = new THREE.CylinderGeometry(0.08, 0.1, 4, 6);
     const poleMat = new THREE.MeshStandardMaterial({ color: 0x444444 });
@@ -389,10 +384,10 @@ function createLampPost(x, y, z, id) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'facility' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createBench(x, y, z, id) {
+function createBench(x, y, z, id, group) {
     const g = new THREE.Group();
     const seatMat = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
 
@@ -419,10 +414,10 @@ function createBench(x, y, z, id) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'facility' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createBusStop(x, y, z, id) {
+function createBusStop(x, y, z, id, group) {
     const g = new THREE.Group();
     const poleMat = new THREE.MeshStandardMaterial({ color: 0x2196F3 });
 
@@ -441,10 +436,10 @@ function createBusStop(x, y, z, id) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'facility' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createSculpture(x, y, z, id) {
+function createSculpture(x, y, z, id, group) {
     const g = new THREE.Group();
     const mat = new THREE.MeshStandardMaterial({ color: 0x4a6741, roughness: 0.6, metalness: 0.2 });
 
@@ -468,10 +463,10 @@ function createSculpture(x, y, z, id) {
 
     g.position.set(x, y, z);
     g.userData = { id, type: 'sculpture' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
-function createDuckFallback(x, y, z) {
+function createDuckFallback(x, y, z, group) {
     const g = new THREE.Group();
     const bodyMat = new THREE.MeshStandardMaterial({ color: 0xf4d03f, roughness: 0.6 });
 
@@ -496,7 +491,7 @@ function createDuckFallback(x, y, z) {
 
     g.position.set(x, y, z);
     g.userData = { id: 'duck_fallback', type: 'sculpture' };
-    buildingGroup.add(g);
+    group.add(g);
 }
 
 // =====================================================
