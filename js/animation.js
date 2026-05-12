@@ -101,7 +101,7 @@ export function createMovingBus(scene) {
 export function updateBusPosition() {
     if (!movingBus || busPath.length === 0) return;
 
-    const speed = 0.003;
+    const speed = 0.003 * 0.5;
     busProgress += speed;
 
     if (busProgress >= 1) {
